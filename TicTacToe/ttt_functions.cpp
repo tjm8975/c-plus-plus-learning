@@ -38,6 +38,13 @@ void greet(vector<char> board) {
     cout << "===========\n";
     cout << "Instructions: Each tile on the board is represented by a number as shown below.\nEnter a number to mark an X on the board in that position.\n";
     display_board(board);
+    // Prompt user to begin when ready
+    string answer = "";
+    while (answer != "y") {
+        cout << "Press 'y' to begin: ";
+        cin >> answer;
+    }
+    cout << endl;  // Print a newline for readability in command line
 }
 
 // Prompts the user for a rematch and returns true if yes, false otherwise
