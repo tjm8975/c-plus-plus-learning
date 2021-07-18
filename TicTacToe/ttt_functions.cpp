@@ -30,6 +30,16 @@ void display_board(vector<char> board) {
     display_spaces(board, 6);
 }
 
+// Displays the intro and instructions for the game
+// The passed board will always have values 1 through 9
+void greet(vector<char> board) {
+    cout << "===========\n";
+    cout << "Tic-Tac-Toe\n";
+    cout << "===========\n";
+    cout << "Instructions: Each tile on the board is represented by a number as shown below.\nEnter a number to mark an X on the board in that position.\n";
+    display_board(board);
+}
+
 // Prompts the user for a rematch and returns true if yes, false otherwise
 bool rematch() {
     string answer;

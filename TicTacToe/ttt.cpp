@@ -6,9 +6,12 @@
 using namespace std;
 
 int main() {
-    vector<char> board;
+    // Initialized with numbers for printing the intro
+    vector<char> board = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
     bool play_again = true;
     bool game_over = false;
+
+    greet(board);  // Displays intro and instructions
 
     // Main loop that allows multiple rounds to be played
     while (play_again) {
