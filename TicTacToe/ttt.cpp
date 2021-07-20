@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <Windows.h>
 #include "ttt_functions.hpp"
 
 using namespace std;
@@ -18,12 +19,18 @@ int main() {
     // Main loop that allows multiple rounds to be played
     while (play_again) {
         reset_vectors(board, open_tiles, player_tiles, cpu_tiles);
+        display_board(board);
         // Inner loop that runs a single round
         while (!game_over) {
-            display_board(board);
+            cout << "Your turn." << endl;
             player_move(board, open_tiles, player_tiles);
+            display_board(board);
+            cout << "\nComputer is picking a move ..." << endl;
+            Sleep(1000);
+            cpu_move(board, open_tiles, cpu_tiles);
+            display_board(board);
             // Test print vectors to check for updates
-            test_vectors(board, open_tiles, player_tiles, cpu_tiles);
+            //test_vectors(board, open_tiles, player_tiles, cpu_tiles);
             game_over = true;  // Terminate loop for inital testing
         }
         // Prompt user for a rematch

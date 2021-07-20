@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <ctime>
 
 using namespace std;
 
@@ -8,9 +9,8 @@ using namespace std;
 void reset_vectors(vector<char> &board, vector<int> &open_tiles, vector<int> &player_tiles, vector<int> &cpu_tiles) {
     board = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
     open_tiles = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-    vector<int> clear_int_vect = {};
-    player_tiles = clear_int_vect;
-    cpu_tiles = clear_int_vect;
+    player_tiles.clear();
+    cpu_tiles.clear();
 }
 
 // Helper function to print out a row of the game board.
@@ -93,6 +93,17 @@ void player_move(vector<char> &board, vector<int> &open_tiles, vector<int> &play
     // Updated tracking vectors
     player_tiles.push_back(move);
     board[move - 1] = 'X';
+}
+
+// Simulates the computer choosing a move.
+// Randomly picks an open tile and marks it.
+void cpu_move(vector<char> &board, vector<int> &open_tiles, vector<int> &cpu_tiles) {
+    int num_open_tiles = open_tiles.size();
+    int move;
+    srand(time(NULL));
+    move = rand() % num_open_tiles;
+    cpu_tiles.push_back(move);
+    board[move - 1] = 'O';
 }
 
 // Helper function to print out any vector<int>
