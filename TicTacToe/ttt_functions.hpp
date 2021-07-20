@@ -15,3 +15,5 @@ void player_move(vector<char> &board, vector<int> &open_tiles, vector<int> &play
 void test_vectors(vector<char> board, vector<int> open_tiles, vector<int> player_tiles, vector<int> cpu_tiles);
 
 void cpu_move(vector<char> &board, vector<int> &open_tiles, vector<int> &cpu_tiles);
+
+bool check_win_conditions(vector<int> moves);

@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <ctime>
+#include <algorithm>
 
 using namespace std;
 
@@ -120,4 +121,44 @@ void test_vectors(vector<char> board, vector<int> open_tiles, vector<int> player
     vector_print(open_tiles);
     vector_print(player_tiles);
     vector_print(cpu_tiles);
+}
+
+// Helper function that finds out if a player has marked a specific tile
+// Returns true if the player has that tile marked
+bool has_tile(int tile, vector<int> moves) {
+    return find(moves.begin(), moves.end(), tile) != moves.end();
+}
+
+// Checks all 3 vertical win conditions for a given vector of moves
+bool check_vertical(vector<int> moves) {
+    // Needs to have tiles 1, 4, 7 to win in first column
+    if (has_tile(1, moves)) {
+        if (has_tile(4, moves)) {
+            if (has_tile(7, moves)) {
+                return true;
+            }
+        }
+    } else if (has_tile(2, moves)) {
+        if (has_tile(5, moves)) {
+            if (has_tile(8, moves)) {
+                return true;
+            }
+        }
+    } else if (has_tile(3, moves)) {
+        if (has_tile(6, moves)) {
+            if (has_tile(9, moves)) {
+                return true;
+            }
+        }
+    }
+    // Player doesn't have any column filled with 3 marks
+    return false;
+}
+
+// Checks all win conditions for a given player
+bool check_win_conditions(vector<int> moves) {
+    //if (check_vertical(moves)) {
+        //return true;
+    //}
+    return true;
 }

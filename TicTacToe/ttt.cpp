@@ -20,15 +20,20 @@ int main() {
     while (play_again) {
         reset_vectors(board, open_tiles, player_tiles, cpu_tiles);
         display_board(board);
+        int move_count = 0;
         // Inner loop that runs a single round
         while (!game_over) {
+            // Player turn
             cout << "Your turn." << endl;
             player_move(board, open_tiles, player_tiles);
             display_board(board);
+            move_count++;
+            // Computer turn
             cout << "\nComputer is picking a move ..." << endl;
             Sleep(1000);
             cpu_move(board, open_tiles, cpu_tiles);
             display_board(board);
+            move_count++;
             // Test print vectors to check for updates
             //test_vectors(board, open_tiles, player_tiles, cpu_tiles);
             game_over = true;  // Terminate loop for inital testing
