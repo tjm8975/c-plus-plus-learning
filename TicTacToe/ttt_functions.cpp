@@ -103,8 +103,8 @@ void cpu_move(vector<char> &board, vector<int> &open_tiles, vector<int> &cpu_til
     int move;
     srand(time(NULL));
     move = rand() % num_open_tiles;
-    cpu_tiles.push_back(move);
-    board[move - 1] = 'O';
+    cpu_tiles.push_back(open_tiles[move]);
+    board[open_tiles[move] - 1] = 'O';
 }
 
 // Helper function to print out any vector<int>
