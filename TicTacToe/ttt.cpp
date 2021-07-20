@@ -16,27 +16,45 @@ int main() {
 
     greet(board);  // Displays intro and instructions
 
-    // Main loop that allows multiple rounds to be played
+    // Main loop that allows multiple games to be played
     while (play_again) {
         reset_vectors(board, open_tiles, player_tiles, cpu_tiles);
         display_board(board);
         int move_count = 0;
-        // Inner loop that runs a single round
-        while (!game_over) {
+        // Inner loop that runs a single game
+        while (!game_over && !open_tiles.empty()) {
             // Player turn
-            cout << "Your turn." << endl;
             player_move(board, open_tiles, player_tiles);
             display_board(board);
             move_count++;
+            //test_vectors(open_tiles, player_tiles, cpu_tiles); For testing, remove before final revision
+            // Check if player won
+            if (move_count >= 5) {  // 5 total moves needed before player can win
+                if (check_win_conditions(player_tiles)) {
+                    game_over = true;
+                    cout << "You won!" << endl;
+                    break;  // Computer can't make any more moves
+                }
+                // Check for tie
+                if (move_count == 9) {
+                    cout << "It's a tie!" << endl;
+                    break;  // Computer can't make any more moves
+                }
+            }
             // Computer turn
             cout << "\nComputer is picking a move ..." << endl;
             Sleep(1000);
             cpu_move(board, open_tiles, cpu_tiles);
             display_board(board);
             move_count++;
-            // Test print vectors to check for updates
-            //test_vectors(board, open_tiles, player_tiles, cpu_tiles);
-            game_over = true;  // Terminate loop for inital testing
+            //test_vectors(open_tiles, player_tiles, cpu_tiles); For testing, remove before final revision
+            // Check if computer won
+            if (move_count >= 6) {  // 6 total moves needed before cpu can win
+                if (check_win_conditions(cpu_tiles)) {
+                    game_over = true;
+                    cout << "You lost! Better luck next time." << endl;
+                }
+            }
         }
         // Prompt user for a rematch
         play_again = rematch();

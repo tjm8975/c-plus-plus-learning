@@ -83,7 +83,7 @@ bool is_open_tile(int tile, vector<int> &open_tiles) {
 // Tile is marked in board vector.
 void player_move(vector<char> &board, vector<int> &open_tiles, vector<int> &player_tiles) {
     int move;
-    cout << "Please enter your move: ";
+    cout << "\nPlease enter your move: ";
     cin >> move;
     // Check if valid move
     while (!is_open_tile(move, open_tiles)) {
@@ -100,11 +100,13 @@ void player_move(vector<char> &board, vector<int> &open_tiles, vector<int> &play
 // Randomly picks an open tile and marks it.
 void cpu_move(vector<char> &board, vector<int> &open_tiles, vector<int> &cpu_tiles) {
     int num_open_tiles = open_tiles.size();
-    int move;
+    int move_index;
     srand(time(NULL));
-    move = rand() % num_open_tiles;
-    cpu_tiles.push_back(open_tiles[move]);
-    board[open_tiles[move] - 1] = 'O';
+    move_index = rand() % num_open_tiles;
+    int move = open_tiles[move_index];
+    cpu_tiles.push_back(move);
+    board[move - 1] = 'O';
+    open_tiles.erase(open_tiles.begin() + move_index);
 }
 
 // Helper function to print out any vector<int>
@@ -116,11 +118,14 @@ void vector_print(vector<int> vect) {
 }
 
 // Prints out each vector for testing purposes
-void test_vectors(vector<char> board, vector<int> open_tiles, vector<int> player_tiles, vector<int> cpu_tiles) {
-    display_board(board);
+void test_vectors(vector<int> open_tiles, vector<int> player_tiles, vector<int> cpu_tiles) {
+    cout << "\nOpen Tiles: ";
     vector_print(open_tiles);
+    cout << "\nPlayer Tiles: ";
     vector_print(player_tiles);
+    cout << "\nComputer Tiles: ";
     vector_print(cpu_tiles);
+    cout << endl;
 }
 
 // Helper function that finds out if a player has marked a specific tile
@@ -129,36 +134,81 @@ bool has_tile(int tile, vector<int> moves) {
     return find(moves.begin(), moves.end(), tile) != moves.end();
 }
 
+// Helper function to check any column for a win
+bool check_vertical(int column, vector<int> moves) {
+    if (has_tile(column, moves)) {
+        if (has_tile(column + 3, moves)) {
+            if (has_tile(column + 6, moves)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 // Checks all 3 vertical win conditions for a given vector of moves
-bool check_vertical(vector<int> moves) {
-    // Needs to have tiles 1, 4, 7 to win in first column
-    if (has_tile(1, moves)) {
-        if (has_tile(4, moves)) {
-            if (has_tile(7, moves)) {
-                return true;
-            }
-        }
-    } else if (has_tile(2, moves)) {
-        if (has_tile(5, moves)) {
-            if (has_tile(8, moves)) {
-                return true;
-            }
-        }
-    } else if (has_tile(3, moves)) {
-        if (has_tile(6, moves)) {
-            if (has_tile(9, moves)) {
-                return true;
-            }
-        }
+bool check_all_verticals(vector<int> moves) {
+    if (check_vertical(1, moves)) {  // Check first column
+        return true;
+    } else if (check_vertical(2, moves)) {  // Check second column
+        return true;
+    } else if (check_vertical(3, moves)) {  // Check third column
+        return true;
     }
     // Player doesn't have any column filled with 3 marks
     return false;
 }
 
+// Helper function to check any row for a win
+// int row == 1 for row 1, 4 for row 2, and 7 for row 3
+bool check_horizontal(int row, vector<int> moves) {
+    if (has_tile(row, moves)) {
+        if (has_tile(row + 1, moves)) {
+            if (has_tile(row + 2, moves)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+// Checks all 3 horizontal win conditions for a given vector of moves
+bool check_all_horizontals(vector<int> moves) {
+    if (check_horizontal(1, moves)) {  // Check first row
+        return true;
+    } else if (check_horizontal(4, moves)) {  // Check second row
+        return true;
+    } else if (check_horizontal(7, moves)) {  // Check third row
+        return true;
+    }
+    // Player doesn't have any column filled with 3 marks
+    return false;
+}
+
+// Checks both diagonal win conditions for a given vector of moves
+bool check_diagonals(vector<int> moves) {
+    if (has_tile(5, moves)) {  // Check 5 first as both diagonals need tile 5
+        if (has_tile(1, moves)) {
+            if (has_tile(9, moves)) {
+                return true;
+            }
+        } else if (has_tile(3, moves)) {
+            if (has_tile(7, moves)) {
+                return true;
+            }
+        } 
+    }
+    return false;
+}
+
 // Checks all win conditions for a given player
 bool check_win_conditions(vector<int> moves) {
-    //if (check_vertical(moves)) {
-        //return true;
-    //}
-    return true;
+    if (check_all_verticals(moves)) {
+        return true;
+    } else if (check_all_horizontals(moves)) {
+        return true;
+    } else if (check_diagonals(moves)) {
+        return true;
+    }
+    return false;
 }
