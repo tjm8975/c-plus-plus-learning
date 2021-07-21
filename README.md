@@ -6,8 +6,8 @@ This repository contains some of the various coding challenges I have done in th
 In addition, I have added my own improvements to the base challenge code for fun and more experimentation.
 
 ---
-## Coding Challenges
-### UFO Hangman Game (CLI)
+## Coding Projects
+### UFO Hangman Game (Functions Project)
 - This is a CLI based game similar to hangman, but with each incorrect guess, the stick figure gets pulled further into a tractor beam.
 - Improvements made include ...
     - Codeword is randomly picked from a vector of strings
@@ -17,7 +17,7 @@ In addition, I have added my own improvements to the base challenge code for fun
     - Player can play more than once
     - Prevents player from guessing a previously guessed letter
 
-### Tic-Tac-Toe (CLI)
+### Tic-Tac-Toe (Functions Challenge Project)
 - This is a CLI based tic-tac-toe implementation.
 - Code challenge requirements were as follows:
     - Use a `for` loop or `while` loop to iterate through the player turns.
