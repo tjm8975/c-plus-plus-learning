@@ -1,9 +1,9 @@
 # c-plus-plus-learning
 I have started learning C++ through [codecademy](https:www.codecademy.com).
 
-This repository contains some of the various coding challenges I have done in the C++ course.
+This repository contains some of the various coding projects I have done in the C++ course.
 
-In addition, I have added my own improvements to the base challenge code for fun and more experimentation.
+In addition, I have added my own improvements to the requirements for fun and more experimentation.
 
 ---
 ## Coding Projects
@@ -24,4 +24,20 @@ In addition, I have added my own improvements to the base challenge code for fun
     - Use a vector or an array to hold nine positions of the 3x3 grid.
     - Use functions to make the program modular.
 - These requirements have been met in my implementation finished on 7/20.
-- I have plans to add more features to this program once I finish the rest of the course.
+- Features added beyond requirements include ...
+    - Randomly pick who goes first
+
+## Course Finished
+I have officially finished the course as of 7/21/2021.
+
+### Topics Covered
+- Compiling and Executing
+- Variables and Data Types
+- Conditionals and Logic
+- Loops
+- Vectors
+- Functions
+- Classes and Objects
+- References and Pointers
+
+I feel that I have learned quite a bit regarding the syntax of C++ as I already have experience with OOP in Java.
