@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <Windows.h>
+#include <ctime>
 #include "ttt_functions.hpp"
 
 using namespace std;
@@ -14,46 +15,39 @@ int main() {
     bool play_again = true;
     bool game_over = false;
 
+    srand(time(NULL));
+
     greet(board);  // Displays intro and instructions
 
     // Main loop that allows multiple games to be played
     while (play_again) {
         reset_vectors(board, open_tiles, player_tiles, cpu_tiles);
+
+        // Randomly pick which player goes first (human or computer)
+        cout << "Randomly picking who will go first ..." << endl;
+        Sleep(1000);
+        bool human_first = rand() % 2;
+        human_first ? cout << "You get to go first." << endl : cout << "Computer gets to go first." << endl;
+        
         display_board(board);
         int move_count = 0;
+
         // Inner loop that runs a single game
         while (!game_over && !open_tiles.empty()) {
-            // Player turn
-            player_move(board, open_tiles, player_tiles);
-            display_board(board);
-            move_count++;
-            //test_vectors(open_tiles, player_tiles, cpu_tiles); For testing, remove before final revision
-            // Check if player won
-            if (move_count >= 5) {  // 5 total moves needed before player can win
-                if (check_win_conditions(player_tiles)) {
-                    game_over = true;
-                    cout << "You won!" << endl;
-                    break;  // Computer can't make any more moves
+            if (human_first) {
+                general_player_move(board, open_tiles, player_tiles, move_count);  // Human player goes first
+                if (first_player_win(move_count, player_tiles, game_over)) {
+                    break;  // Second player can't make another move if first player won
                 }
-                // Check for tie
-                if (move_count == 9) {
-                    cout << "It's a tie!" << endl;
-                    break;  // Computer can't make any more moves
+                general_player_move(board, open_tiles, cpu_tiles, move_count, true);  // Computer player goes second
+                second_player_win(move_count, cpu_tiles, game_over, true);
+            } else {
+                general_player_move(board, open_tiles, cpu_tiles, move_count, true);  // Computer player goes first
+                if (first_player_win(move_count, cpu_tiles, game_over, true)) {
+                    break;  // Second player can't make another move if first player won
                 }
-            }
-            // Computer turn
-            cout << "\nComputer is picking a move ..." << endl;
-            Sleep(1000);
-            cpu_move(board, open_tiles, cpu_tiles);
-            display_board(board);
-            move_count++;
-            //test_vectors(open_tiles, player_tiles, cpu_tiles); For testing, remove before final revision
-            // Check if computer won
-            if (move_count >= 6) {  // 6 total moves needed before cpu can win
-                if (check_win_conditions(cpu_tiles)) {
-                    game_over = true;
-                    cout << "You lost! Better luck next time." << endl;
-                }
+                general_player_move(board, open_tiles, player_tiles, move_count);  // Human player goes second
+                second_player_win(move_count, player_tiles, game_over);
             }
         }
         // Prompt user for a rematch

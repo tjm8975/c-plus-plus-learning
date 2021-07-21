@@ -3,6 +3,7 @@
 #include <string>
 #include <ctime>
 #include <algorithm>
+#include <Windows.h>
 
 using namespace std;
 
@@ -109,7 +110,7 @@ void cpu_move(vector<char> &board, vector<int> &open_tiles, vector<int> &cpu_til
     open_tiles.erase(open_tiles.begin() + move_index);
 }
 
-// Helper function to print out any vector<int>
+// Helper function to print out any vector<int>.
 void vector_print(vector<int> vect) {
     for (int i = 0; i < vect.size(); i++) {
         cout << vect[i] << " ";
@@ -117,7 +118,7 @@ void vector_print(vector<int> vect) {
     cout << endl;
 }
 
-// Prints out each vector for testing purposes
+// Prints out each vector for testing purposes.
 void test_vectors(vector<int> open_tiles, vector<int> player_tiles, vector<int> cpu_tiles) {
     cout << "\nOpen Tiles: ";
     vector_print(open_tiles);
@@ -128,13 +129,13 @@ void test_vectors(vector<int> open_tiles, vector<int> player_tiles, vector<int> 
     cout << endl;
 }
 
-// Helper function that finds out if a player has marked a specific tile
-// Returns true if the player has that tile marked
+// Helper function that finds out if a player has marked a specific tile.
+// Returns true if the player has that tile marked.
 bool has_tile(int tile, vector<int> moves) {
     return find(moves.begin(), moves.end(), tile) != moves.end();
 }
 
-// Helper function to check any column for a win
+// Helper function to check any column for a win.
 bool check_vertical(int column, vector<int> moves) {
     if (has_tile(column, moves)) {
         if (has_tile(column + 3, moves)) {
@@ -146,7 +147,7 @@ bool check_vertical(int column, vector<int> moves) {
     return false;
 }
 
-// Checks all 3 vertical win conditions for a given vector of moves
+// Checks all 3 vertical win conditions for a given vector of moves.
 bool check_all_verticals(vector<int> moves) {
     if (check_vertical(1, moves)) {  // Check first column
         return true;
@@ -159,8 +160,8 @@ bool check_all_verticals(vector<int> moves) {
     return false;
 }
 
-// Helper function to check any row for a win
-// int row == 1 for row 1, 4 for row 2, and 7 for row 3
+// Helper function to check any row for a win.
+// int row == 1 for row 1, 4 for row 2, and 7 for row 3.
 bool check_horizontal(int row, vector<int> moves) {
     if (has_tile(row, moves)) {
         if (has_tile(row + 1, moves)) {
@@ -172,7 +173,7 @@ bool check_horizontal(int row, vector<int> moves) {
     return false;
 }
 
-// Checks all 3 horizontal win conditions for a given vector of moves
+// Checks all 3 horizontal win conditions for a given vector of moves.
 bool check_all_horizontals(vector<int> moves) {
     if (check_horizontal(1, moves)) {  // Check first row
         return true;
@@ -185,7 +186,7 @@ bool check_all_horizontals(vector<int> moves) {
     return false;
 }
 
-// Checks both diagonal win conditions for a given vector of moves
+// Checks both diagonal win conditions for a given vector of moves.
 bool check_diagonals(vector<int> moves) {
     if (has_tile(5, moves)) {  // Check 5 first as both diagonals need tile 5
         if (has_tile(1, moves)) {
@@ -201,7 +202,7 @@ bool check_diagonals(vector<int> moves) {
     return false;
 }
 
-// Checks all win conditions for a given player
+// Checks all win conditions for a given player.
 bool check_win_conditions(vector<int> moves) {
     if (check_all_verticals(moves)) {
         return true;
@@ -211,4 +212,64 @@ bool check_win_conditions(vector<int> moves) {
         return true;
     }
     return false;
+}
+
+// Handles the move of any player (computer or human).
+// The passed in cpu value determines whether or not the calls should be for the computer moves.
+void general_player_move(vector<char> &board, vector<int> &open_tiles, vector<int> &player_tiles, int &move_count, bool cpu = false) {
+    if (cpu) {
+        cout << "\nComputer is picking a move ..." << endl;
+        Sleep(1000);
+        cpu_move(board, open_tiles, player_tiles);  // Makes move for cpu
+    } else {
+        player_move(board, open_tiles, player_tiles);  // Handles a player's move
+    }
+    display_board(board);
+    move_count++;
+}
+
+// Reduce repeated code when implementing random picking of which player goes first.
+// Determines whether or not the first player has won yet.
+// cpu parameter used to determine whether or not the player in question is the computer.
+// Printed output is different for player win or cpu win.
+// Returns whether or not the game is over, either first player won or tied.
+// Bool value used in ttt.cpp main function to break from loop preventing second player from
+// making another move even though they have lost.
+bool first_player_win(int &move_count, vector<int> player_tiles, bool &game_over, bool cpu = false) {
+    if (move_count >= 5) {  // 5 total moves needed before first player can win
+        if (check_win_conditions(player_tiles)) {
+            game_over = true;
+            if (cpu) {
+                cout << "You lost! Better luck next time." << endl;  // Human player lost
+            } else {
+                cout << "You won!" << endl;
+            }
+            return true;  // First player won
+        }
+        // Check for tie
+        if (move_count == 9) {
+            game_over = true;
+            cout << "It's a tie!" << endl;
+            return true;  
+        }
+    }
+    return false;  // First player did not win yet
+}
+
+// Determines whether or not the second player has won yet.
+// cpu parameter used to determine whether or not the player in question is the computer.
+// Printed output is different for player win or cpu win.
+// Does not return a bool like first_player_win above as this is called at end of loop.
+// Setting game_over to true will break from the main loop in ttt.cpp on its own
+void second_player_win(int &move_count, vector<int> player_tiles, bool &game_over, bool cpu = false) {
+    if (move_count >= 6) {  // 6 total moves needed before second player can win
+        if (check_win_conditions(player_tiles)) {
+            game_over = true;
+            if (cpu) {
+                cout << "You lost! Better luck next time." << endl;  // Human player lost
+            } else {
+                cout << "You won!" << endl;
+            }
+        }
+    }
 }
